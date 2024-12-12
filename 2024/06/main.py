@@ -1,4 +1,4 @@
-with open("06\input.txt") as file:
+with open("06/input.txt") as file:
     labMap = file.readlines()
 
 posX = -1

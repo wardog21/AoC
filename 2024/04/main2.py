@@ -1,4 +1,4 @@
-with open("input.txt") as file:
+with open("04/input.txt") as file:
     lines = file.readlines()
 totalCount = 0
 

@@ -1,4 +1,4 @@
-with open("input.txt") as file:
+with open("02/input.txt") as file:
     reports = file.readlines()
 
 safeReports = 0

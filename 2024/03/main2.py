@@ -1,6 +1,6 @@
 import re
 
-with open("input.txt") as input:
+with open("03/input.txt") as input:
     lines = input.readlines()
 
 result = 0

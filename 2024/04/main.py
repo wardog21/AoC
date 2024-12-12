@@ -44,7 +44,7 @@ def turn135(input):
         output.append(row)
     return output
 
-with open("input.txt") as file:
+with open("04/input.txt") as file:
     lines = file.readlines()
 
 totalCount = countXMAS(lines)

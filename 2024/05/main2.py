@@ -1,4 +1,4 @@
-with open("05\input.txt") as file:
+with open("05/input.txt") as file:
     input = file.readlines()
 
 rules = []
