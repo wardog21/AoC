@@ -49,7 +49,7 @@ for step in range(10000):
             
     maxGrouping = max(maxGrouping, max([len(m) for m in mergedGroups]))
 
-    if max([len(m) for m in mergedGroups]) > 50:
+    if max([len(m) for m in mergedGroups]) > 200:
         print(step, maxGrouping)
         image = []
         for i in range(height):
