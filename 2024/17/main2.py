@@ -22,7 +22,7 @@ while queue:
     if i < 0:
         continue
     for o in range(8):
-        test_a = (a << 3) + o
+        test_a = 8*a + o
         output = calc(test_a)
         if not output == command[i:]:
             continue
