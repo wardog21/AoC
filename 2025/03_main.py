@@ -1,5 +1,4 @@
 import re
-import math
 from pathlib import Path
 
 code = 0
