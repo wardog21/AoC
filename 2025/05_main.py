@@ -1,6 +1,5 @@
 import re
 from pathlib import Path
-import numpy as np
 
 code = 0
 code2 = 0
