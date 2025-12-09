@@ -37,36 +37,47 @@ for i in range(len(tiles)):
 path = MathPath(tiles)
 
 for cnt, (value,tile,tile2) in enumerate(area):
-    if cnt < 100000:
-        continue
-    print(cnt,len(area))
+    # print(cnt,value,len(area))
     a = (min(tile[0],tile2[0]), min(tile[1],tile2[1]))
     b = (max(tile[0],tile2[0]), max(tile[1],tile2[1]))
     
-    checkPoints = set()
-    checkPoints2 = set([a,b,(a[0],b[1]),(b[0],a[1])])
-    for x in range(a[0], b[0]+1):
-        checkPoints.add((x,a[1]))
-        checkPoints.add((x,b[1]))
-    for y in range(a[1], b[1]+1):
-        checkPoints.add((a[0],y))
-        checkPoints.add((b[0],y))
+    # checkPoints = set()
+    # checkPoints2 = set([a,b,(a[0],b[1]),(b[0],a[1])])
+    # for x in range(a[0], b[0]+1):
+    #     checkPoints.add((x,a[1]))
+    #     checkPoints.add((x,b[1]))
+    # for y in range(a[1], b[1]+1):
+    #     checkPoints.add((a[0],y))
+    #     checkPoints.add((b[0],y))
     
-    checkPoints = list(checkPoints.difference(validTiles))
-    checkPoints2 = list(checkPoints2.difference(validTiles))
+    # checkPoints = list(checkPoints.difference(validTiles))
+    # checkPoints2 = list(checkPoints2.difference(validTiles))
     
-    if len(checkPoints) == 0:
+    # if len(checkPoints) == 0:
+    #     code2 = value
+    #     break
+    # elif len(checkPoints2) > 0 and not all(path.contains_points(checkPoints2)):
+    #     continue
+    # else:
+    #     if all(path.contains_points(checkPoints)):
+    #         code2 = value
+    #         break
+
+    valid = True
+    for i in range(len(tiles)):
+
+        if tiles[i][0] == tiles[i-1][0]:
+            if a[0] < tiles[i][0] and b[0] > tiles[i][0] and a[1] < max(tiles[i][1], tiles[i-1][1]) and b[1] > min(tiles[i][1], tiles[i-1][1]):
+                valid = False
+                break
+        elif tiles[i][1] == tiles[i-1][1]:
+            if a[1] < tiles[i][1] and b[1] > tiles[i][1] and a[0] < max(tiles[i][0], tiles[i-1][0]) and b[0] > min(tiles[i][0], tiles[i-1][0]):
+                valid = False
+                break
+        
+    if valid:
         code2 = value
         break
-    elif len(checkPoints2) > 0 and not all(path.contains_points(checkPoints2)):
-        continue
-    else:
-        containedPoints = path.contains_points(checkPoints)
-        for i in range(len(containedPoints)):
-            if containedPoints[i]:
-                validTiles.add(checkPoints[i])
-        if all(containedPoints):
-            code2 = value
-            break
+        
 
 print(code,code2)
