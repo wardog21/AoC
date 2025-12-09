@@ -1,6 +1,5 @@
 import re
 from pathlib import Path
-import numpy as np
 from matplotlib.path import Path as MathPath
 
 code = 0
@@ -41,27 +40,9 @@ for cnt, (value,tile,tile2) in enumerate(area):
     a = (min(tile[0],tile2[0]), min(tile[1],tile2[1]))
     b = (max(tile[0],tile2[0]), max(tile[1],tile2[1]))
     
-    # checkPoints = set()
-    # checkPoints2 = set([a,b,(a[0],b[1]),(b[0],a[1])])
-    # for x in range(a[0], b[0]+1):
-    #     checkPoints.add((x,a[1]))
-    #     checkPoints.add((x,b[1]))
-    # for y in range(a[1], b[1]+1):
-    #     checkPoints.add((a[0],y))
-    #     checkPoints.add((b[0],y))
-    
-    # checkPoints = list(checkPoints.difference(validTiles))
-    # checkPoints2 = list(checkPoints2.difference(validTiles))
-    
-    # if len(checkPoints) == 0:
-    #     code2 = value
-    #     break
-    # elif len(checkPoints2) > 0 and not all(path.contains_points(checkPoints2)):
-    #     continue
-    # else:
-    #     if all(path.contains_points(checkPoints)):
-    #         code2 = value
-    #         break
+    checkPoints = list(set([a,b,(a[0],b[1]),(b[0],a[1])]).difference(validTiles))
+    if len(checkPoints) > 0 and not all(path.contains_points(checkPoints)):
+        continue
 
     valid = True
     for i in range(len(tiles)):
@@ -79,5 +60,4 @@ for cnt, (value,tile,tile2) in enumerate(area):
         code2 = value
         break
         
-
 print(code,code2)
