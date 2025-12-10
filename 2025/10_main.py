@@ -1,7 +1,7 @@
 import re
 from pathlib import Path
 import numpy as np
-import time
+from z3 import *
 
 code = 0
 code2 = 0
@@ -10,9 +10,7 @@ ROOT_DIR = Path(__file__).parent
 with open(ROOT_DIR / "10_data.txt") as file:
     lines = file.readlines()
 
-startTime = time.time()
-for lineId,line in enumerate(lines):
-    print(lineId,len(lines),time.time()-startTime)
+for line in lines:
     leds = np.array([1 if l=='#' else 0 for l in re.findall(r"\[([.#]+)\]",line)[0]])
 
     buttons = []
@@ -39,45 +37,22 @@ for lineId,line in enumerate(lines):
     code += cnt
 
     # code2
-    cnt = -1
-    upper = max(jolts)
-    current = np.zeros(len(buttons),np.int_)
-    tooHigh = []
-    while True:
-        current[0] += 1
-        for c in range(len(current)):
-            if current[c] > upper:
-                current[c] = 0
-                current[c+1] += 1
-        if all(current >= np.full(len(buttons),upper)):
-            break
-        
-        if cnt > 0 and sum(current) > cnt:
-            continue
+    m = np.matrix(buttons).T
+    x = [Int(f"x_{i}") for i in range(m.shape[1])]
+    opt = Optimize()
 
-        highTriggered = False
-        for high in tooHigh:
-            if all(high <= current):
-                highTriggered = True
-                break
-        if highTriggered:
-            continue
-        
-        jolt = np.zeros(len(leds),np.int_)
-        next = False
-        for i,tc in enumerate(current):
-            jolt += buttons[i]*tc
-
-        if any(jolt > jolts):
-            tooHigh.append(np.copy(current))
-            continue
-
-        if all(jolt == jolts):
-            if cnt < 0:
-                cnt = sum(current)
-            else:
-                cnt = min(cnt,sum(current))
+    for i in range(m.shape[0]):
+        equation = Sum(m[i, j] * x[j] for j in range(m.shape[1]))
+        opt.add(equation == jolts[i])
     
-    code2 += cnt
+    for var in x:
+        opt.add(var >= 0)
 
+    objective = opt.minimize(Sum(x))
+
+    if opt.check() == sat:
+        model = opt.model()
+        solution = np.array([model[var].as_long() for var in x])
+        code2 += sum(solution)
+    
 print(code, code2)
